@@ -10,16 +10,54 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-
 const pigLatin = (word) => {
+  // Creating Arrays to Hold Information
+    let vowels = ['a', 'e', 'i', 'o', 'u'];
+    word = word.trim().toLowerCase();
+    const wordArry = word.split(' ');
+    let pigLatin = [];
 
-  // Your code here
+    console.log(`${wordArry}`);
 
+    // let firstLetter = word.charAt(0);
+
+  for (var i=0; i <= wordArry.length; i++) {
+    if (vowels.indexOf(wordArry[i]) !== -1) {
+      let vowelFirst = word + "yay";
+      // console.log(`${vowelFirst}`)
+      // document.getElementById("display-element").innerHTML = (`${vowelFirst}`);
+      pigLatin.push(vowelFirst)
+      return vowelFirst
+    } else {
+      console.log(i)
+      let firstMatch = word.match(/[aeiou]/g) || 0;
+      let vowel = word.indexOf(firstMatch[0]);
+      let consFirst = word.substring(vowel) + word.substring(0, vowel) + "ay";
+      // console.log(`${consFirst}`)
+      // document.getElementById("display-element").innerHTML = (`${consFirst}`);
+      pigLatin.push(consFirst)
+      return consFirst
+    }
+  }
 }
 
-// the first function called in the program to get an input from the user
-// to run the function use the command: node main.js
-// to close it ctrl + C
+// const pigLatin = (str) => {
+//   let vowels = ['a', 'e', 'i', 'o', 'u'];
+//   let newStr = "";
+
+//   if (vowels.indexOf(str[0]) > -1) {
+//     newStr = str + "hay"
+//     document.getElementById("display-element").innerHTML = (`${newStr}`);
+//     return newStr
+//   } else {
+//     let firstMatch = str.match(/[aeiou]/g) || 0;
+//     let vowel = str.indexOf(firstMatch[0]);
+//     newStr = str.substring(vowel) + str.substring(0, vowel) + "ay";
+//     document.getElementById("display-element").innerHTML = (`${newStr}`);
+//     return newStr
+//   }
+// }
+
 const getPrompt = () => {
   rl.question('word ', (answer) => {
     console.log( pigLatin(answer) );
@@ -55,17 +93,3 @@ if (typeof describe === 'function') {
   getPrompt();
 
 }
-
-
-
-
-
-
-// **********
-//   HINTS
-// **********
-
-// break your code into pieces and focus on one piece at a time...
-// 1. if word begins with a vowel send to one function: adds "yay"
-// 2. if word begins with a consonant send to another function: splices off beginning, returns word with new ending.
-// 3. if multiple words, create array of words, loop over them, sending them to different functions and creating a new array with the new words.
