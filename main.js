@@ -10,57 +10,73 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const pigLatin = (word) => {
-  // Creating Arrays to Hold Information
-    let vowels = ['a', 'e', 'i', 'o', 'u'];
-    word = word.trim().toLowerCase();
-    const wordArry = word.split(' ');
-    let pigLatin = [];
+// Takes in a string to turn to pig latin
+const pigPhrase = (phrase) => {
+  // Trim and lowercase the input
+  phrase = phrase.toLowerCase().trim();
+  // Split up the string if there are multiple words
+  var sentence = phrase.split(' ');
+  // Create an empty array to store the seperated words
+  var piggedPhrase = [];
 
-    console.log(`${wordArry}`);
+  // Each one of the words in the phrase are being pushed to be translated
+  for (var i = 0; i <= sentence.length - 1; i++) {
+    piggedPhrase.push(pigWord(sentence[i]));
+  };
+  // After translating join the phrase back into a single string/sentence/phrase
+  return piggedPhrase.join(' ');
+}
 
-    // let firstLetter = word.charAt(0);
+// Translate each word in the phrase
+const pigWord = (word) => {
+  //Created a variable to hold all of the consonants before the first vowel
+  let firstLetters = word.slice( -word.length, findFirstVowel(word));
 
-  for (var i=0; i <= wordArry.length; i++) {
-    if (vowels.indexOf(wordArry[i]) !== -1) {
-      let vowelFirst = word + "yay";
-      // console.log(`${vowelFirst}`)
-      // document.getElementById("display-element").innerHTML = (`${vowelFirst}`);
-      pigLatin.push(vowelFirst)
-      return vowelFirst
-    } else {
-      console.log(i)
-      let firstMatch = word.match(/[aeiou]/g) || 0;
-      let vowel = word.indexOf(firstMatch[0]);
-      let consFirst = word.substring(vowel) + word.substring(0, vowel) + "ay";
-      // console.log(`${consFirst}`)
-      // document.getElementById("display-element").innerHTML = (`${consFirst}`);
-      pigLatin.push(consFirst)
-      return consFirst
-    }
+  // Tests to see if the word is a consonant and then translates the word appropriately (vowel first +yay; consonant first +ay)
+  if (consonantTest(word) == true )  {
+    // For words that start with a vowel
+    return  word + 'yay';
+  } else {
+    // For words that start with a consonant
+    return word.slice(findFirstVowel(word), word.length) + firstLetters + 'ay';
   }
 }
 
-// const pigLatin = (str) => {
-//   let vowels = ['a', 'e', 'i', 'o', 'u'];
-//   let newStr = "";
+// Function to test if a word starts with a consonant
+const consonantTest = (word) => {
+  // Array to store vowels
+  let vowels = ['a', 'e', 'i', 'o', 'u'];
+  // Variable to hold the first letter of the word
+  let findFirstLetter = word.charAt(0);
 
-//   if (vowels.indexOf(str[0]) > -1) {
-//     newStr = str + "hay"
-//     document.getElementById("display-element").innerHTML = (`${newStr}`);
-//     return newStr
-//   } else {
-//     let firstMatch = str.match(/[aeiou]/g) || 0;
-//     let vowel = str.indexOf(firstMatch[0]);
-//     newStr = str.substring(vowel) + str.substring(0, vowel) + "ay";
-//     document.getElementById("display-element").innerHTML = (`${newStr}`);
-//     return newStr
-//   }
-// }
+  // True if the first letter is not a vowel
+  if (vowels.indexOf(findFirstLetter) != -1) {
+    return true
+  } else {
+    return false
+  }
+}
+
+// Function to find the first vowel in a string and returns its position
+const findFirstVowel = (word) => {
+  // Array for vowels
+  let vowels = ['a', 'e', 'i', 'o', 'u'];
+
+  // For every word, find the first vowel
+  for (var i = 0; i <= word.length - 1; i++) {
+    // Goes through each word and finds the first vowel
+    if (vowels.indexOf(word[i]) !== -1) {
+      // Returns position of first vowel
+      return i;
+    }
+  }
+  // Returns word length
+  return word.length;
+}
 
 const getPrompt = () => {
   rl.question('word ', (answer) => {
-    console.log( pigLatin(answer) );
+    console.log( pigPhrase(answer) );
     getPrompt();
   });
 }
@@ -70,22 +86,22 @@ const getPrompt = () => {
 // to close them ctrl + C
 if (typeof describe === 'function') {
 
-  describe('#pigLatin()', () => {
+  describe('#pigPhrase()', () => {
     it('should translate a simple word', () => {
-      assert.equal(pigLatin('car'), 'arcay');
-      assert.equal(pigLatin('dog'), 'ogday');
+      assert.equal(pigPhrase('car'), 'arcay');
+      assert.equal(pigPhrase('dog'), 'ogday');
     });
     it('should translate a complex word', () => {
-      assert.equal(pigLatin('create'), 'eatecray');
-      assert.equal(pigLatin('valley'), 'alleyvay');
+      assert.equal(pigPhrase('create'), 'eatecray');
+      assert.equal(pigPhrase('valley'), 'alleyvay');
     });
     it('should attach "yay" if word begins with vowel', () => {
-      assert.equal(pigLatin('egg'), 'eggyay');
-      assert.equal(pigLatin('emission'), 'emissionyay');
+      assert.equal(pigPhrase('egg'), 'eggyay');
+      assert.equal(pigPhrase('emission'), 'emissionyay');
     });
     it('should lowercase and trim word before translation', () => {
-      assert.equal(pigLatin('HeLlO '), 'ellohay');
-      assert.equal(pigLatin(' RoCkEt'), 'ocketray');
+      assert.equal(pigPhrase('HeLlO '), 'ellohay');
+      assert.equal(pigPhrase(' RoCkEt'), 'ocketray');
     });
   });
 } else {
